@@ -28,7 +28,7 @@ git rebase to_be_merged_branch
 - Add/Remove file from commit
 ```
 git add <file>
-git remove <file>
+git reset <file>
 ```
 
 - Squash someone's branch into one commit

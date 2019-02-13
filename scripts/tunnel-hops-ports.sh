@@ -17,6 +17,7 @@ help () {
     echo "                    where the run.sh script can be found."
     echo " -k|--kill          If set kill all the existing tunnels"
     echo "                    before establishing new ones."
+    echo " --help             This window.
     echo ""
     echo "Author: Kajetan Maliszewski <kajetan.maliszewski@gmail.com>"
     exit 1

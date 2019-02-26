@@ -15,18 +15,21 @@ help () {
     echo "                    create the tunnel with."
     echo " -d|--dir   <value> Location on the remote machine"
     echo "                    where the run.sh script can be found."
-    echo " -k|--kill          If set kill all the existing tunnels"
-    echo "                    before establishing new ones."
+    echo " -k|--kill          If set kill all the existing background"
+    echo "                    tunnels before establishing new ones."
+    echo " --kill-only        Like --kill but after killing the tunnels"
+    echo "                    exits the script immediately."
     echo " --help             This window."
     echo ""
     echo "Author: Kajetan Maliszewski <kajetan.maliszewski@gmail.com>"
     exit 1
 }
 
-PORTS='8080,2181,9091'
+PORTS='8080'
 HOST=bbc2
 DIR=/home/kaichi/karamel-chef
 KILL=NO
+KILL_ONLY=NO
 
 POSITIONAL=()
 while [[ $# -gt 0 ]]
@@ -53,6 +56,11 @@ case $key in
     KILL=YES
     shift
     ;;
+    --kill-only)
+    KILL_ONLY=YES
+    KILL=YES
+    shift
+    ;;
     --help)
     help
     ;;
@@ -63,14 +71,17 @@ esac
 done
 set -- "${POSITIONAL[@]}"
    
+if [ $KILL = "YES" ]; then
+    echo "Killing all the existing background tunnels"
+    pkill -f 'ssh -N'
+    if [ $KILL_ONLY = "YES" ]; then
+        exit 1
+    fi
+fi
+
 echo "Tunnel ports: ${PORTS[*]}"
 echo "With the machine: $HOST"
 echo "karamel-chef directory: $DIR"
-
-if [ $KILL = "YES" ]; then
-    echo "Killing all the existing tunnels"
-    pkill -f 'ssh -N'
-fi
 
 resp=$(ssh "$HOST" "cd $DIR; ./run.sh ports")
 resp=${resp}

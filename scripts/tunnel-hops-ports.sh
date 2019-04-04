@@ -1,4 +1,4 @@
-#!/bin/bash
+ #!/bin/bash
 
 returnPortMapping () {
     line=$(printf -- '%s\n' "$2" | grep "$1")
@@ -6,7 +6,7 @@ returnPortMapping () {
 }
 
 help () {
-    echo "Usage:"
+    echo " Usage:"
     echo ""
     echo " ./tunnel-hops-ports.sh [options]"
     echo ""
@@ -21,11 +21,18 @@ help () {
     echo "                    exits the script immediately."
     echo " --help             This window."
     echo ""
+    echo " Ports:"
+    echo ""
+    echo "  3306 - mysql server"
+    echo "  4848 - payara server"
+    echo "  8181 - https hopsworks UI"
+    echo ""
     echo "Author: Kajetan Maliszewski <kajetan.maliszewski@gmail.com>"
+    echo ""
     exit 1
 }
 
-PORTS='8181'
+PORTS='8181,4848,3306'
 HOST=bbc2
 DIR=/home/kaichi/karamel-chef
 KILL=NO
@@ -91,4 +98,3 @@ for port in "${PORTS_ARR[@]}"; do
     remote_port=$(returnPortMapping $port "${resp[@]}")
     ssh -N -f -L $port:localhost:$remote_port $HOST
 done
-
